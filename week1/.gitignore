@@ -1,0 +1,11 @@
+.ipynb_checkpoints/
+ny_taxi_postgres_data/
+*.csv
+pgadmin_data/
+**/.my_env
+anaconda_projects/
+public_links_learning.txt
+runtime_commands.txt
+*.parquet
+*.csv
+
