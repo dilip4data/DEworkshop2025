@@ -170,6 +170,70 @@ Inserted! time taken      7.477 seconds.
 
 Completed! Total time taken was     60.099 seconds for 5 batches.
 
+```
 
+
+## Question 3. Trip Segmentation Count
+
+During the period of October 1st 2019 (inclusive) and November 1st 2019 (exclusive), how many trips, **respectively**, happened:
+1. Up to 1 mile
+2. In between 1 (exclusive) and 3 miles (inclusive),
+3. In between 3 (exclusive) and 7 miles (inclusive),
+4. In between 7 (exclusive) and 10 miles (inclusive),
+5. Over 10 miles
 
 ```
+
+SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
+and lpep_dropoff_datetime::date < '2019-11-01'
+and trip_distance <=1;
+
+-- 104,802
+
+SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
+and lpep_dropoff_datetime::date < '2019-11-01'
+and trip_distance > 1 and trip_distance <=3;
+
+-- 198,924
+
+SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
+and lpep_dropoff_datetime::date < '2019-11-01'
+and trip_distance > 3 and trip_distance <=7;
+
+-- 109,603
+
+SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
+and lpep_dropoff_datetime::date < '2019-11-01'
+and trip_distance > 7 and trip_distance <=10;
+
+-- 27,678
+
+SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
+and lpep_dropoff_datetime::date < '2019-11-01'
+and trip_distance > 10;
+
+-- 35,189
+
+```
+
+### Answer : 
+
+- 104,802;  198,924;  109,603;  27,678;  35,189
+
+## Question 4. Longest trip for each day
+
+Which was the pick up day with the longest trip distance?
+Use the pick up time for your calculations.
+
+Tip: For every day, we only care about one single trip with the longest distance. 
+
+```
+
+SQL
+
+```
+
+### Answer : 
+
+
+
