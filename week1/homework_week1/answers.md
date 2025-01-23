@@ -228,12 +228,65 @@ Use the pick up time for your calculations.
 Tip: For every day, we only care about one single trip with the longest distance. 
 
 ```
-
-SQL
+SELECT lpep_pickup_datetime::date, max(trip_distance) FROM public.green_taxi_data 
+group by lpep_pickup_datetime::date
+order by 2 desc;
 
 ```
 
-### Answer : 
+### Answer : 2019-10-31
+
+
+## Question 5. Three biggest pickup zones
+
+Which were the top pickup locations with over 13,000 in
+`total_amount` (across all trips) for 2019-10-18?
+
+Consider only `lpep_pickup_datetime` when filtering by date.
+
+```
+
+SELECT "Zone", sum(total_amount)  FROM green_taxi_data g join taxi_zone t
+on g."PULocationID" = t."LocationID"
+where lpep_pickup_datetime::date = '2019-10-18'
+group by "Zone"
+having sum(total_amount) > 13000
+
+
+```
+<img src="https://github.com/user-attachments/assets/871f5883-7624-4afe-8375-b9051d45b32b" width="350" />
+&emsp; 
+
+### Answer : East Harlem North, East Harlem South, Morningside Heights
+
+
+## Question 6. Largest tip
+
+For the passengers picked up in October 2019 in the zone
+named "East Harlem North" which was the drop off zone that had
+the largest tip?
+
+Note: it's `tip` , not `trip`
+
+We need the name of the zone, not the ID.
+
+```
+select "Zone" as largest_tip_dropoff_zone from taxi_zone
+where "LocationID" = (select "DOLocationID" from (
+SELECT "DOLocationID",max(tip_amount) FROM green_taxi_data g join taxi_zone t
+on g."PULocationID" = t."LocationID" and "Zone" = 'East Harlem North'
+where extract (year from lpep_pickup_datetime::date) = 2019
+and extract (month from lpep_pickup_datetime::date) = 10
+group by "DOLocationID"
+order by 2 desc
+limit 1) foo )
+```
+<img src="https://github.com/user-attachments/assets/fadd1135-4de7-4312-a097-c2330bc4ed9b" width="350" />
+&emsp; 
+
+### Answer : JFK Airport
+
+
 
 
 
