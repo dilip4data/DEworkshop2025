@@ -8,4 +8,9 @@ public_links_learning.txt
 runtime_commands.txt
 *.parquet
 *.csv
+terraform/.terraform.lock.hcl
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+docker-compose.yml.exercise
 

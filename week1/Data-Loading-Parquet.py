@@ -39,7 +39,7 @@ def main(params):
     if '.csv' in file_name_csv:
         print('CSV yay!')
         print('\n')
-        df = pd.read_csv(file_name_csv, nrows=10)
+        df = pd.read_csv(file_name_csv)
         df_iter = pd.read_csv(file_name_csv, iterator=True, chunksize=100000)
 
         # Create CSV taxizone table
