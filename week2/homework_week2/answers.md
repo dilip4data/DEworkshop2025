@@ -1,299 +1,73 @@
-# Module 1 Homework: Docker & SQL
-
-### Question 1. Understanding docker first run
-
-Run docker with the python:3.12.8 image in an interactive mode, use the entrypoint bash.
-What's the version of pip in the image?
-
-``` $
-    (new_environment2024)
-    dilip@Dilipkumar MINGW64 ~
-    $ docker run -it python:3.12.8 bash
-    Unable to find image 'python:3.12.8' locally
-    3.12.8: Pulling from library/python
-    Digest: sha256:5893362478144406ee0771bd9c38081a185077fb317ba71d01b7567678a89708
-    Status: Downloaded newer image for python:3.12.8
-    root@a9e7e9378f2b:/# pip version
-    ERROR: unknown command "version"
-    root@a9e7e9378f2b:/# pip --version
-    pip 24.3.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)
-    root@a9e7e9378f2b:/#
-```        
-### Answer : 24.3.1
-
-### Question 2. Understanding Docker networking and docker-compose
-
-Given the following `docker-compose.yaml`, what is the `hostname` and `port` that **pgadmin** should use to connect to the postgres database?
-
-```yaml
-services:
-  db:
-    container_name: postgres
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_DB: 'ny_taxi'
-    ports:
-      - '5433:5432'
-    volumes:
-      - vol-pgdata:/var/lib/postgresql/data
-
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "pgadmin@pgadmin.com"
-      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
-    ports:
-      - "8080:80"
-    volumes:
-      - vol-pgadmin_data:/var/lib/pgadmin  
+## Module 2 Homework
 
-volumes:
-  vol-pgdata:
-    name: vol-pgdata
-  vol-pgadmin_data:
-    name: vol-pgadmin_data
-```
+ATTENTION: At the end of the submission form, you will be required to include a link to your GitHub repository or other public code-hosting site. This repository should contain your code for solving the homework. If your solution includes code that is not in file format, please include these directly in the README file of your repository.
 
-- postgres:5433
-- localhost:5432
-- db:5433
-- postgres:5432
-- db:5432
+> In case you don't get one option exactly, select the closest one 
 
-If there are more than one answers, select only one of them
+For the homework, we'll be working with the _green_ taxi dataset located here:
 
+`https://github.com/DataTalksClub/nyc-tlc-data/releases/tag/green/download`
 
-**Code**
+To get a `wget`-able link, use this prefix (note that the link itself gives 404):
 
-```
-$ docker-compose up -d
- db Pulled
- Network week1_default  Creating
- Network week1_default  Created
- Volume "vol-pgdata"  Creating
- Volume "vol-pgdata"  Created
- Volume "vol-pgadmin_data"  Creating
- Volume "vol-pgadmin_data"  Created
- Container pgadmin  Creating
- Container postgres  Creating
- Container pgadmin  Created
- Container postgres  Created
- Container pgadmin  Starting
- Container postgres  Starting
- Container pgadmin  Started
- Container postgres  Started
+`https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/`
 
-$ docker ps -a
-CONTAINER ID   IMAGE                   COMMAND                  CREATED             STATUS                         PORTS                           NAMES
-68e61569291c   dpage/pgadmin4:latest   "/entrypoint.sh"         14 seconds ago      Up 13 seconds                  443/tcp, 0.0.0.0:8080->80/tcp   pgadmin
-9164926ad91a   postgres:17-alpine      "docker-entrypoint.s…"   14 seconds ago      Up 13 seconds                  0.0.0.0:5433->5432/tcp          postgres
+### Assignment
 
+So far in the course, we processed data for the year 2019 and 2020. Your task is to extend the existing flows to include data for the year 2021.
 
-```
+![homework datasets](../../../02-workflow-orchestration/images/homework.png)
 
-<img src="https://github.com/user-attachments/assets/7cf97061-dfc8-412b-9714-9698b5edc2c8" width="350" />
-&emsp; &emsp;
-<img src="https://github.com/user-attachments/assets/9b9a2501-fde1-4e22-ae16-01dcd0b1352b" width="350" />
+As a hint, Kestra makes that process really easy:
+1. You can leverage the backfill functionality in the [scheduled flow](../../../02-workflow-orchestration/flows/07_gcp_taxi_scheduled.yaml) to backfill the data for the year 2021. Just make sure to select the time period for which data exists i.e. from `2021-01-01` to `2021-07-31`. Also, make sure to do the same for both `yellow` and `green` taxi data (select the right service in the `taxi` input).
+2. Alternatively, run the flow manually for each of the seven months of 2021 for both `yellow` and `green` taxi data. Challenge for you: find out how to loop over the combination of Year-Month and `taxi`-type using `ForEach` task which triggers the flow for each combination using a `Subflow` task.
 
+### Quiz Questions
 
-### Answer : 
-          - postgres:5432
-          - db:5432
+Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to test your understanding of workflow orchestration, Kestra and ETL pipelines for data lakes and warehouses.
 
+1) Within the execution for `Yellow` Taxi data for the year `2020` and month `12`: what is the uncompressed file size (i.e. the output file `yellow_tripdata_2020-12.csv` of the `extract` task)?
+- 128.3 MB
+- 134.5 MB
+- 364.7 MB
+- 692.6 MB
 
-##  Prepare Postgres
+2) What is the rendered value of the variable `file` when the inputs `taxi` is set to `green`, `year` is set to `2020`, and `month` is set to `04` during execution?
+- `{{inputs.taxi}}_tripdata_{{inputs.year}}-{{inputs.month}}.csv` 
+- `green_tripdata_2020-04.csv`
+- `green_tripdata_04_2020.csv`
+- `green_tripdata_2020.csv`
 
-Run Postgres and load data as shown in the videos
-We'll use the green taxi trips from October 2019:
+3) How many rows are there for the `Yellow` Taxi data for all CSV files in the year 2020?
+- 13,537.299
+- 24,648,499
+- 18,324,219
+- 29,430,127
 
-```bash
-wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-10.csv.gz
-```
+4) How many rows are there for the `Green` Taxi data for all CSV files in the year 2020?
+- 5,327,301
+- 936,199
+- 1,734,051
+- 1,342,034
 
-You will also need the dataset with zones:
+5) How many rows are there for the `Yellow` Taxi data for the March 2021 CSV file?
+- 1,428,092
+- 706,911
+- 1,925,152
+- 2,561,031
 
-```bash
-wget https://github.com/DataTalksClub/nyc-tlc-data/releases/download/misc/taxi_zone_lookup.csv
-```
+6) How would you configure the timezone to New York in a Schedule trigger?
+- Add a `timezone` property set to `EST` in the `Schedule` trigger configuration  
+- Add a `timezone` property set to `America/New_York` in the `Schedule` trigger configuration
+- Add a `timezone` property set to `UTC-5` in the `Schedule` trigger configuration
+- Add a `location` property set to `New_York` in the `Schedule` trigger configuration  
 
-Download this data and put it into Postgres.
 
-You can use the code from the course. It's up to you whether
-you want to use Jupyter or a python script.
+## Submitting the solutions
 
+* Form for submitting: https://courses.datatalks.club/de-zoomcamp-2025/homework/hw2
+* Check the link above to see the due date
 
-## Docker Run output :-
+## Solution
 
-```
-docker build -t taxi_ingest:v001 .
-
-
-$ docker run --env-file .my_env -it  --network=week1_default    taxi_ingest:v001  --user=$USER  --password=$PASS  --host=$HOST  --port=$PORT  --db=$DB  --tb $TABLE_NAME1 $TABLE_NAME2  --url $URL1 $URL2
-
-Downloading parquet datafile green_tripdata_2019-10.parquet ...
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 7680k  100 7680k    0     0  25.8M      0 --:--:-- --:--:-- --:--:-- 25.8M
-
-
-Downloading taxi zone CSV file taxi_zone_lookup.csv ...
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 12331  100 12331    0     0   123k      0 --:--:-- --:--:-- --:--:--  122k
-
-
-CSV yay!
-
-
-Parquet oh yeahh!
-
-
-Inserting batch 1....
-Inserted! time taken     17.693 seconds.
-
-Inserting batch 2....
-Inserted! time taken     12.161 seconds.
-
-Inserting batch 3....
-Inserted! time taken     11.702 seconds.
-
-Inserting batch 4....
-Inserted! time taken     10.996 seconds.
-
-Inserting batch 5....
-Inserted! time taken      7.477 seconds.
-
-Completed! Total time taken was     60.099 seconds for 5 batches.
-
-```
-
-
-## Question 3. Trip Segmentation Count
-
-During the period of October 1st 2019 (inclusive) and November 1st 2019 (exclusive), how many trips, **respectively**, happened:
-1. Up to 1 mile
-2. In between 1 (exclusive) and 3 miles (inclusive),
-3. In between 3 (exclusive) and 7 miles (inclusive),
-4. In between 7 (exclusive) and 10 miles (inclusive),
-5. Over 10 miles
-
-```
-
-SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
-and lpep_dropoff_datetime::date < '2019-11-01'
-and trip_distance <=1;
-
--- 104,802
-
-SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
-and lpep_dropoff_datetime::date < '2019-11-01'
-and trip_distance > 1 and trip_distance <=3;
-
--- 198,924
-
-SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
-and lpep_dropoff_datetime::date < '2019-11-01'
-and trip_distance > 3 and trip_distance <=7;
-
--- 109,603
-
-SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
-and lpep_dropoff_datetime::date < '2019-11-01'
-and trip_distance > 7 and trip_distance <=10;
-
--- 27,678
-
-SELECT count(*) FROM public.green_taxi_data where lpep_pickup_datetime::date >= '2019-10-01'
-and lpep_dropoff_datetime::date < '2019-11-01'
-and trip_distance > 10;
-
--- 35,189
-
-```
-
-### Answer : 
-
-- 104,802;  198,924;  109,603;  27,678;  35,189
-
-## Question 4. Longest trip for each day
-
-Which was the pick up day with the longest trip distance?
-Use the pick up time for your calculations.
-
-Tip: For every day, we only care about one single trip with the longest distance. 
-
-```
-SELECT lpep_pickup_datetime::date, max(trip_distance) FROM public.green_taxi_data 
-group by lpep_pickup_datetime::date
-order by 2 desc;
-
-```
-
-### Answer : 2019-10-31
-
-
-## Question 5. Three biggest pickup zones
-
-Which were the top pickup locations with over 13,000 in
-`total_amount` (across all trips) for 2019-10-18?
-
-Consider only `lpep_pickup_datetime` when filtering by date.
-
-```
-
-SELECT "Zone", sum(total_amount)  FROM green_taxi_data g join taxi_zone t
-on g."PULocationID" = t."LocationID"
-where lpep_pickup_datetime::date = '2019-10-18'
-group by "Zone"
-having sum(total_amount) > 13000
-
-
-```
-<img src="https://github.com/user-attachments/assets/871f5883-7624-4afe-8375-b9051d45b32b" width="350" />
-&emsp; 
-
-### Answer : East Harlem North, East Harlem South, Morningside Heights
-
-
-## Question 6. Largest tip
-
-For the passengers picked up in October 2019 in the zone
-named "East Harlem North" which was the drop off zone that had
-the largest tip?
-
-Note: it's `tip` , not `trip`
-
-We need the name of the zone, not the ID.
-
-```
-select "Zone" as largest_tip_dropoff_zone from taxi_zone
-where "LocationID" = (select "DOLocationID" from (
-SELECT "DOLocationID",max(tip_amount) FROM green_taxi_data g join taxi_zone t
-on g."PULocationID" = t."LocationID" and "Zone" = 'East Harlem North'
-where extract (year from lpep_pickup_datetime::date) = 2019
-and extract (month from lpep_pickup_datetime::date) = 10
-group by "DOLocationID"
-order by 2 desc
-limit 1) foo )
-```
-<img src="https://github.com/user-attachments/assets/fadd1135-4de7-4312-a097-c2330bc4ed9b" width="350" />
-&emsp; 
-
-### Answer : JFK Airport
-
-
-## Question 7. Terraform Workflow
-
-Which of the following sequences, **respectively**, describes the workflow for: 
-1. Downloading the provider plugins and setting up backend,
-2. Generating proposed changes and auto-executing the plan
-3. Remove all resources managed by terraform`
-
-### Answer :
-- teraform init, terraform apply -auto-approve, terraform destroy
-
+Will be added after the due date
