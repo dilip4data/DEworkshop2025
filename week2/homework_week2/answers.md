@@ -22,14 +22,17 @@ Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to te
 
   <img src="https://github.com/user-attachments/assets/2f582047-11af-441a-9a4a-5ae52e4001ab" width="300" />
        
-  ### Answer : 128.3 MB
+### Answer : 128.3 MB
 
 2) What is the rendered value of the variable `file` when the inputs `taxi` is set to `green`, `year` is set to `2020`, and `month` is set to `04` during execution?
 - `{{inputs.taxi}}_tripdata_{{inputs.year}}-{{inputs.month}}.csv` 
 - `green_tripdata_2020-04.csv`
 - `green_tripdata_04_2020.csv`
 - `green_tripdata_2020.csv`
-
+  
+### Answer :
+    "{{render(vars.file)}}" =   green_tripdata_2020-04.csv
+  
 3) How many rows are there for the `Yellow` Taxi data for all CSV files in the year 2020?
 - 13,537.299
 - 24,648,499
