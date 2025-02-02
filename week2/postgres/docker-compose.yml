@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  postgres_standalone:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres-zoomcamp
+    ports:
+      - "5432:5432"
+    volumes:
+      - zoomcamp-data:/var/lib/postgresql/data
+  
+  pgadmin:
+    image:  dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      postgres_standalone:
+        condition: service_started
+    ports:
+      - "8085:80"
+volumes:
+  zoomcamp-data:
+    driver: local
+  pgadmin-data:
+    driver: local
