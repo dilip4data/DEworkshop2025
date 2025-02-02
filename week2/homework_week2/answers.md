@@ -77,12 +77,6 @@ select count(*) from public.yellow_tripdata where filename LIKE '%2021-03%';
 - Add a `timezone` property set to `UTC-5` in the `Schedule` trigger configuration
 - Add a `location` property set to `New_York` in the `Schedule` trigger configuration  
 
+### Answer  : Add a `timezone` property set to `America/New_York` in the `Schedule` trigger configuration
 
-## Submitting the solutions
 
-* Form for submitting: https://courses.datatalks.club/de-zoomcamp-2025/homework/hw2
-* Check the link above to see the due date
-
-## Solution
-
-Will be added after the due date
