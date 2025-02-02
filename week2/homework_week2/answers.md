@@ -31,7 +31,8 @@ Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to te
 - `green_tripdata_2020.csv`
   
 ### Answer :
-   ` "{{render(vars.file)}}" `   green_tripdata_2020-04.csv
+   ` "{{render(vars.file)}}"  =>  green_tripdata_2020-04.csv `
+
   
 3) How many rows are there for the `Yellow` Taxi data for all CSV files in the year 2020?
 - 13,537.299
@@ -39,11 +40,19 @@ Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to te
 - 18,324,219
 - 29,430,127
 
+  `select count(*) from public.yellow_tripdata;`
+  
+### Answer : 
+
 4) How many rows are there for the `Green` Taxi data for all CSV files in the year 2020?
 - 5,327,301
 - 936,199
 - 1,734,051
 - 1,342,034
+  
+  `select count(*) from public.green_tripdata;`
+  
+### Answer : 1,734,051
 
 5) How many rows are there for the `Yellow` Taxi data for the March 2021 CSV file?
 - 1,428,092
