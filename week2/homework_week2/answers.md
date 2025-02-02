@@ -31,7 +31,7 @@ Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to te
 - `green_tripdata_2020.csv`
   
 ### Answer :
-    "{{render(vars.file)}}" =   green_tripdata_2020-04.csv
+   ` "{{render(vars.file)}}" `   green_tripdata_2020-04.csv
   
 3) How many rows are there for the `Yellow` Taxi data for all CSV files in the year 2020?
 - 13,537.299
