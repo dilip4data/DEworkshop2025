@@ -18,38 +18,39 @@ id: dilip_own_ForEach
 namespace: zoomcamp
 
 inputs:
-  - id: taxi_types
+  - id: taxi
     type: ARRAY
     itemType: STRING
     defaults: [yellow, green]
-      
-  - id: years
-    type: ARRAY
-    itemType: INT
-    defaults: [2021]
 
-  - id: months
+  - id: year_month
     type: ARRAY
     itemType: STRING
-    defaults: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+    defaults: ["2021-01", "2021-02", "2021-03", "2021-04", "2021-05", "2021-06", "2021-07", "2021-08", "2021-09", "2021-10", "2021-11", "2021-12"]
 
-     
 tasks:
-  - id: taxi_type
+  - id: t_type
     type: io.kestra.plugin.core.flow.ForEach
-    values: "{{inputs.taxi_types}}"
+    values: "{{inputs.taxi}}"
     tasks:
-      - id: year
+      - id: t_ym
         type: io.kestra.plugin.core.flow.ForEach
-        values: "{{inputs.years}}"
+        values: "{{inputs.year_month}}"
         tasks:
-          - id: month
-            type: io.kestra.plugin.core.flow.ForEach
-            values: "{{inputs.months}}"
-            tasks:
-              - id: full_file_name
+          - id: if_green
+            type: io.kestra.plugin.core.flow.If
+            condition: "{{ parents[0].taskrun.value == 'green'}}"
+            then:
+              - id: print_green
                 type: io.kestra.plugin.core.debug.Return
-                format: "{{ parents[1].taskrun.value }}_tripdata_{{ parents[0].taskrun.value }}-{{ taskrun.value }}.csv"
+                format: "{{ parents[1].taskrun.value }}_tripdata_{{parents[0].taskrun.value}}.csv"
+          - id: if_yellow
+            type: io.kestra.plugin.core.flow.If
+            condition: "{{ parents[0].taskrun.value == 'yellow'}}"
+            then:
+              - id: print_yellow
+                type: io.kestra.plugin.core.debug.Return
+                format: "{{ parents[1].taskrun.value }}_tripdata_{{parents[0].taskrun.value}}.csv"
 
 
 ```
