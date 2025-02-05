@@ -10,6 +10,50 @@ As a hint, Kestra makes that process really easy:
 1. You can leverage the backfill functionality in the [scheduled flow](../../../02-workflow-orchestration/flows/07_gcp_taxi_scheduled.yaml) to backfill the data for the year 2021. Just make sure to select the time period for which data exists i.e. from `2021-01-01` to `2021-07-31`. Also, make sure to do the same for both `yellow` and `green` taxi data (select the right service in the `taxi` input).
 2. Alternatively, run the flow manually for each of the seven months of 2021 for both `yellow` and `green` taxi data. Challenge for you: find out how to loop over the combination of Year-Month and `taxi`-type using `ForEach` task which triggers the flow for each combination using a `Subflow` task.
 
+### Source code for Challenge question.
+
+```
+
+id: dilip_own_ForEach
+namespace: zoomcamp
+
+inputs:
+  - id: taxi_types
+    type: ARRAY
+    itemType: STRING
+    defaults: [yellow, green]
+      
+  - id: years
+    type: ARRAY
+    itemType: INT
+    defaults: [2021]
+
+  - id: months
+    type: ARRAY
+    itemType: STRING
+    defaults: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+
+     
+tasks:
+  - id: taxi_type
+    type: io.kestra.plugin.core.flow.ForEach
+    values: "{{inputs.taxi_types}}"
+    tasks:
+      - id: year
+        type: io.kestra.plugin.core.flow.ForEach
+        values: "{{inputs.years}}"
+        tasks:
+          - id: month
+            type: io.kestra.plugin.core.flow.ForEach
+            values: "{{inputs.months}}"
+            tasks:
+              - id: full_file_name
+                type: io.kestra.plugin.core.debug.Return
+                format: "{{ parents[1].taskrun.value }}_tripdata_{{ parents[0].taskrun.value }}-{{ taskrun.value }}.csv"
+
+
+```
+
 ### Quiz Questions
 
 Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to test your understanding of workflow orchestration, Kestra and ETL pipelines for data lakes and warehouses.
