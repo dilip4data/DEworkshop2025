@@ -71,9 +71,13 @@ doubling the estimated bytes processed.
 - BigQuery automatically caches the first queried column, so adding a second column increases processing time but does not affect the estimated bytes scanned.
 - When selecting multiple columns, BigQuery performs an implicit join operation between them, increasing the estimated bytes processed
 
-![image.png](attachment:8bd71caf-26ff-45fa-8ece-c22183409903:image.png)
+<img src="https://github.com/user-attachments/assets/e722158a-cea7-4451-954f-0f9f58c5a816" width="400" />
+&emsp; &emsp;
+<img src="https://github.com/user-attachments/assets/6add0fb5-3854-4b5f-b671-7ba1112682dc" width="400" />
 
-![image.png](attachment:4027aac8-d4a1-4e1d-8e1e-0b79b9cc7ce0:image.png)
+### Answer :- 
+BigQuery is a columnar database, and it only scans the specific columns requested in the query. Querying two columns (PULocationID, DOLocationID) requires 
+reading more data than querying one column (PULocationID), leading to a higher estimated number of bytes processed.
 
 ## Question 4:
 How many records have a fare_amount of 0?
@@ -81,6 +85,10 @@ How many records have a fare_amount of 0?
 - 546,578
 - 20,188,016
 - 8,333
+  
+`select count(*) from `dtcde-2025.trips_data_all.yellow_tripdata_2024` where fare_amount = 0;`
+
+### Answer :- 8,333
 
 ## Question 5:
 What is the best strategy to make an optimized table in Big Query if your query will always filter based on tpep_dropoff_datetime and order the results by VendorID (Create a new table with this strategy)
@@ -89,6 +97,13 @@ What is the best strategy to make an optimized table in Big Query if your query 
 - Cluster on tpep_dropoff_datetime Partition by VendorID
 - Partition by tpep_dropoff_datetime and Partition by VendorID
 
+`Filter means reducing to selective results that means partitioning. We skip expensive read on the table by using tpep_dropoff_datetime as the key field for partitioning. The order by means we want to have data sorted out orderly within that partition. The key field for clustering is VendorID`
+
+`create or replace table `dtcde-2025.trips_data_all.yellow_tripdata_partitioned_cluster_2024`
+partition by date(tpep_dropoff_datetime) cluster by VendorID 
+as  (select * from `dtcde-2025.trips_data_all.yellow_tripdata_2024` );`
+
+### Answer :- Partition by tpep_dropoff_datetime and Cluster on VendorID
 
 ## Question 6:
 Write a query to retrieve the distinct VendorIDs between tpep_dropoff_datetime
