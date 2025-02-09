@@ -86,7 +86,9 @@ How many records have a fare_amount of 0?
 - 20,188,016
 - 8,333
   
-`select count(*) from `dtcde-2025.trips_data_all.yellow_tripdata_2024` where fare_amount = 0;`
+```
+select count(*) from `dtcde-2025.trips_data_all.yellow_tripdata_2024` where fare_amount = 0;
+```
 
 ### Answer :- 8,333
 
@@ -117,6 +119,20 @@ Choose the answer which most closely matches.</br>
 - 310.24 MB for non-partitioned table and 26.84 MB for the partitioned table
 - 5.87 MB for non-partitioned table and 0 MB for the partitioned table
 - 310.31 MB for non-partitioned table and 285.64 MB for the partitioned table
+
+```
+select count(distinct VendorID) from `dtcde-2025.trips_data_all.yellow_tripdata_2024` 
+where tpep_dropoff_datetime  > '2024-03-01' and tpep_dropoff_datetime <= '2024-03-15';
+
+select count(distinct VendorID) From `dtcde-2025.trips_data_all.yellow_tripdata_partitioned_cluster_2024`
+where tpep_dropoff_datetime  > '2024-03-01' and tpep_dropoff_datetime <= '2024-03-15';
+```
+<img src="https://github.com/user-attachments/assets/25398c62-53a0-4fa7-ad5e-3a50b0fde470" width="450" />
+&emsp; &emsp;
+<img src="https://github.com/user-attachments/assets/dd7a75a7-f057-4843-9895-2edaecbf7754" width="450" />
+
+
+### Answer :- 310.24 MB for non-partitioned table and 26.84 MB for the partitioned table
 
 
 ## Question 7: 
