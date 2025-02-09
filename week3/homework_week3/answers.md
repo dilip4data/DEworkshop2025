@@ -150,8 +150,15 @@ It is best practice in Big Query to always cluster your data:
 - True
 - False
 
+Unpartitioned tables larger than 64 MB are likely to benefit from clustering. Similarly, table partitions larger than 64 MB are also likely to benefit from clustering. Clustering smaller tables or partitions is possible, but the performance improvement is usually negligible.
+
+Clustering can increase storage costs due to additional metadata and reorganization overhead.
+
 ### Answer :- False
 
 ## (Bonus: Not worth points) Question 9:
 No Points: Write a `SELECT count(*)` query FROM the materialized table you created. How many bytes does it estimate will be read? Why?
 
+<img src="https://github.com/user-attachments/assets/6e2c84d0-eb65-40b9-9211-8b2f6442fe3e" width="350" />
+
+### Answer :- 0 Bytes   BigQuery does not scan actual data at all and rather uses metadata to just simply get count of rows - that's why it is free. Whereas `select * from table` would have accounted to cost Vs count(*)
