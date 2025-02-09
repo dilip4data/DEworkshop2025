@@ -21,6 +21,20 @@ Create an external table using the Yellow Taxi Trip Records. </br>
 Create a (regular/materialized) table in BQ using the Yellow Taxi Trip Records (do not partition or cluster this table). </br>
 </p>
 
+## EXTERNAL AND NATIVE TABLE CREATION
+```
+-- Creating external table referring to gcs path
+create or replace external table dtcde-2025.trips_data_all.external_yellow_tripdata_2024
+options
+(
+  format = 'PARQUET',
+  uris = ['gs://datalake-dtcde-2025/yellow_tripdata_2024-*.parquet']
+);
+
+create or replace table dtcde-2025.trips_data_all.yellow_tripdata_2024 as select * from dtcde-2025.trips_data_all.external_yellow_tripdata_2024
+
+```
+
 ## Question 1:
 Question 1: What is count of records for the 2024 Yellow Taxi Data?
 - 65,623
@@ -28,6 +42,9 @@ Question 1: What is count of records for the 2024 Yellow Taxi Data?
 - 20,332,093
 - 85,431,289
 
+`select count(*) from dtcde-2025.trips_data_all.external_yellow_tripdata_2024;`
+
+### Answer :- 20,332,093
 
 ## Question 2:
 Write a query to count the distinct number of PULocationIDs for the entire dataset on both the tables.</br> 
@@ -37,6 +54,13 @@ What is the **estimated amount** of data that will be read when this query is ex
 - 0 MB for the External Table and 155.12 MB for the Materialized Table
 - 2.14 GB for the External Table and 0MB for the Materialized Table
 - 0 MB for the External Table and 0MB for the Materialized Table
+
+```
+select count(distinct PULocationID) from dtcde-2025.trips_data_all.external_yellow_tripdata_2024;
+select count(distinct PULocationID) from dtcde-2025.trips_data_all.yellow_tripdata_2024;
+```
+### Answer :- 0 MB for the External Table and 155.12 MB for the Materialized Table
+
 
 ## Question 3:
 Write a query to retrieve the PULocationID from the table (not the external table) in BigQuery. Now write a query to retrieve the PULocationID and DOLocationID on the same table. Why are the estimated number of Bytes different?
