@@ -143,11 +143,14 @@ Where is the data stored in the External Table you created?
 - GCP Bucket
 - Big Table
 
+### Answer :- GCP Bucket
+
 ## Question 8:
 It is best practice in Big Query to always cluster your data:
 - True
 - False
 
+### Answer :- False
 
 ## (Bonus: Not worth points) Question 9:
 No Points: Write a `SELECT count(*)` query FROM the materialized table you created. How many bytes does it estimate will be read? Why?
