@@ -38,8 +38,13 @@ or:
 import dlt
 print("dlt version:", dlt.__version__)
 ```
-
 Provide the **version** you see in the output.
+
+<img src="https://github.com/user-attachments/assets/3d88b0e4-41ef-4293-96d8-72e6ef930c5c" width="450" />
+
+### Answer: 1.6.1
+
+
 
 ## **Question 2: Define & Run the Pipeline (NYC Taxi API)**
 
@@ -59,7 +64,19 @@ from dlt.sources.helpers.rest_client import RESTClient
 from dlt.sources.helpers.rest_client.paginators import PageNumberPaginator
 
 
-# your code is here
+@dlt.resource(name="rides")
+def ny_taxi():
+      client = RESTClient(
+            base_url="https://us-central1-dlthub-analytics.cloudfunctions.net",
+            paginator=PageNumberPaginator(
+                base_page = 1, 
+                total_path = None
+          )
+    )
+
+      for page in client.paginate("data_engineering_zoomcamp_api"):
+          yield page
+
 
 
 pipeline = dlt.pipeline(
@@ -71,7 +88,7 @@ pipeline = dlt.pipeline(
 
 Load the data into DuckDB to test:
 ```py
-load_info = pipeline.run(ny_taxi)
+load_info = pipeline.run(ny_taxi,write_disposition="replace")
 print(load_info)
 ```
 Start a connection to your database using native `duckdb` connection and look what tables were generated:"""
@@ -101,6 +118,11 @@ How many tables were created?
 * 6
 * 8
 
+<img src="https://github.com/user-attachments/assets/2c20b00c-c397-4a55-a30d-e542afa2313e" width="350" />
+
+### Answer :-  4
+
+
 ## **Question 3: Explore the loaded data**
 
 Inspect the table `ride`:
@@ -116,6 +138,10 @@ What is the total number of records extracted?
 * 5000
 * 7500
 * 10000
+
+<img src="https://github.com/user-attachments/assets/71272e99-4919-4d90-9192-1039069fc141" width="350" />
+
+### Answer :-  10000
 
 ## **Question 4: Trip Duration Analysis**
 
