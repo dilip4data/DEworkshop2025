@@ -139,7 +139,7 @@ What is the total number of records extracted?
 * 7500
 * 10000
 
-<img src="https://github.com/user-attachments/assets/71272e99-4919-4d90-9192-1039069fc141" width="350" />
+<img src="https://github.com/user-attachments/assets/c740ca7f-e542-4583-bb07-3e9731d0c126" width="350" />
 
 ### Answer :-  10000
 
