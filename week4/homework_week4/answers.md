@@ -51,6 +51,9 @@ from {{ source('raw_nyc_tripdata', 'ext_green_taxi' ) }}
 - `select * from dtc_zoomcamp_2025.raw_nyc_tripdata.green_taxi`
 
 
+### Answer: `select * from myproject.my_nyc_tripdata.ext_green_taxi`
+
+
 ### Question 2: dbt Variables & Dynamic Models
 
 Say you have to modify the following dbt_model (`fct_recent_taxi_trips.sql`) to enable Analytics Engineers to dynamically control the date range. 
@@ -71,6 +74,32 @@ What would you change to accomplish that in a such way that command line argumen
 - Update the WHERE clause to `pickup_datetime >= CURRENT_DATE - INTERVAL '{{ env_var("DAYS_BACK", "30") }}' DAY`
 - Update the WHERE clause to `pickup_datetime >= CURRENT_DATE - INTERVAL '{{ var("days_back", env_var("DAYS_BACK", "30")) }}' DAY`
 - Update the WHERE clause to `pickup_datetime >= CURRENT_DATE - INTERVAL '{{ env_var("DAYS_BACK", var("days_back", "30")) }}' DAY`
+
+```
+dbt_project.yml
+
+vars:
+  days_back: 10
+
+fact_taxi_trips.sql
+
+{{
+    config(
+        materialized='view'
+    )
+}}
+
+select *
+from {{ ref('fact_trips') }}
+where  
+pickup_datetime >= cast('2021-02-02 10:08:51' as timestamp) - INTERVAL '{{ var("days_back", env_var("DAYS_BACK", "30")) }}' DAY
+
+```
+
+` VAR takes the first priority followed by ENV_VAR and then finally default value if present  `
+
+### Answer: 
+Update the WHERE clause to `pickup_datetime >= CURRENT_DATE - INTERVAL '{{ var("days_back", env_var("DAYS_BACK", "30")) }}' DAY`
 
 
 ### Question 3: dbt Data Lineage and Execution
