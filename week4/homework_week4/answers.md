@@ -116,6 +116,19 @@ Select the option that does **NOT** apply for materializing `fct_taxi_monthly_zo
 - `dbt run --select +models/core/`
 - `dbt run --select models/staging/+`
 
+Explanation:
+
+✅ dbt run Runs all models, so it applies for materializing fct_taxi_monthly_zone_revenue.
+
+✅ dbt run --select +models/core/dim_taxi_trips.sql+ --target prod The + before and after means it runs dim_taxi_trips and all its dependencies and dependents, which includes fct_taxi_monthly_zone_revenue.
+
+✅ dbt run --select +models/core/fct_taxi_monthly_zone_revenue.sql The + ensures dependencies like dim_taxi_trips are run, so this applies.
+
+✅ dbt run --select +models/core/ Runs all models in core/, which includes dim_taxi_trips and fct_taxi_monthly_zone_revenue, so it applies.
+
+❌ dbt run --select models/staging/+ This only runs staging models (stg_green_tripdata, stg_yellow_tripdata, etc.), not fct_taxi_monthly_zone_revenue. Since fct_taxi_monthly_zone_revenue is in core/, this option does NOT apply.
+
+### Answer:  `dbt run --select models/staging/+`
 
 ### Question 4: dbt Macros and Jinja
 
@@ -147,12 +160,14 @@ And use on your staging, dim_ and fact_ models as:
 ) }}
 ```
 
+### Answer :
+
 That all being said, regarding macro above, **select all statements that are true to the models using it**:
-- Setting a value for  `DBT_BIGQUERY_TARGET_DATASET` env var is mandatory, or it'll fail to compile
-- Setting a value for `DBT_BIGQUERY_STAGING_DATASET` env var is mandatory, or it'll fail to compile
-- When using `core`, it materializes in the dataset defined in `DBT_BIGQUERY_TARGET_DATASET`
-- When using `stg`, it materializes in the dataset defined in `DBT_BIGQUERY_STAGING_DATASET`, or defaults to `DBT_BIGQUERY_TARGET_DATASET`
-- When using `staging`, it materializes in the dataset defined in `DBT_BIGQUERY_STAGING_DATASET`, or defaults to `DBT_BIGQUERY_TARGET_DATASET`
+- Setting a value for  `DBT_BIGQUERY_TARGET_DATASET` env var is mandatory, or it'll fail to compile   TRUE 
+- Setting a value for `DBT_BIGQUERY_STAGING_DATASET` env var is mandatory, or it'll fail to compile   FALSE
+- When using `core`, it materializes in the dataset defined in `DBT_BIGQUERY_TARGET_DATASET`   TRUE
+- When using `stg`, it materializes in the dataset defined in `DBT_BIGQUERY_STAGING_DATASET`, or defaults to `DBT_BIGQUERY_TARGET_DATASET`   TRUE
+- When using `staging`, it materializes in the dataset defined in `DBT_BIGQUERY_STAGING_DATASET`, or defaults to `DBT_BIGQUERY_TARGET_DATASET`   TRUE
 
 
 ## Serious SQL
