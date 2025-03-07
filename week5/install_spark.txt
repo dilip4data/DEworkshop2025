@@ -1,0 +1,7 @@
+5.2 Installation
+Follow these instructions to install Spark:
+
+Windows
+Linux
+MacOS
+And follow this to run PySpark in Jupyter
