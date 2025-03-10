@@ -1,0 +1,14 @@
+version: '3'
+services:
+  spark-jupyter:
+    build: .
+    image: spark_jupyter_lab:latest    # Name and tag the image
+    ports:
+      - "8888:8888"  # Jupyter Lab, for accessing notebooks
+      - "7077:7077"  # Spark Master, for worker node registration and job submissions in standalone mode
+      - "4040-4044:4040-4044"  # Range for Spark UI, allows monitoring of multiple Spark jobs
+      - "8080:8080"  # Spark Master UI, for monitoring the Spark cluster
+      - "8081:8081"  # Spark Worker UI (optional), for detailed worker monitoring if separate worker nodes are used
+      - "18080:18080"  # Spark History Server, for reviewing job histories 
+    volumes:
+      - "./spark:/opt/spark/work-dir:rw"  # Mount the 'spark' directory to the container's work directory

@@ -1,0 +1,8 @@
+code/spark/data/raw/*
+code/spark/data/pq/*
+code/spark/fhvhv/*
+code/spark/*.csv
+code/spark/*.parquet
+week5/code/spark/fhvhv_tripdata_2021-01.csv
+week5/code/spark/zones/*
+code/spark/zones/*
