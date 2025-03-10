@@ -21,7 +21,7 @@ What's the output?
 > [!NOTE]
 > To install PySpark follow this [guide](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/05-batch/setup/pyspark.md)
 
-### Answer:
+### Answer:  3.5.1
 
 ```
 import pyspark
@@ -50,6 +50,16 @@ What is the average size of the Parquet (ending with .parquet extension) Files t
 - 75MB
 - 100MB
 
+### Answer:  25MB
+
+```
+-rw-r--r-- 1 root root 25397408 Mar 10 07:10 part-00002-7ee647aa-0096-4a08-a1d4-81bbe01107f8-c000.snappy.parquet
+-rw-r--r-- 1 root root 25414796 Mar 10 07:10 part-00001-7ee647aa-0096-4a08-a1d4-81bbe01107f8-c000.snappy.parquet
+-rw-r--r-- 1 root root 25416060 Mar 10 07:10 part-00003-7ee647aa-0096-4a08-a1d4-81bbe01107f8-c000.snappy.parquet
+-rw-r--r-- 1 root root 25395947 Mar 10 07:10 part-00000-7ee647aa-0096-4a08-a1d4-81bbe01107f8-c000.snappy.parquet
+-rw-r--r-- 1 root root        0 Mar 10 07:10 _SUCCESS
+
+```
 
 ## Question 3: Count records 
 
@@ -62,6 +72,17 @@ Consider only trips that started on the 15th of October.
 - 125,567
 - 145,567
 
+### Answer:  125,567
+
+```
+spark.sql("""
+        SELECT COUNT(1) as Oct_15th_trips 
+            FROM YELLOW_TRIPDATA  
+            WHERE date_part('MONTH', pickup_datetime) = 10 and 
+                  date_part('DAY', pickup_datetime) = 15 
+        """).show()
+```
+
 
 ## Question 4: Longest trip
 
@@ -71,6 +92,8 @@ What is the length of the longest trip in the dataset in hours?
 - 142
 - 162
 - 182
+
+### Answer:  162
 
 
 ## Question 5: User Interface
