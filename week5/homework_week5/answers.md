@@ -95,6 +95,17 @@ What is the length of the longest trip in the dataset in hours?
 
 ### Answer:  162
 
+```
+df_yellow \
+    .withColumn('duration_hours',
+                (F.unix_timestamp(df_yellow.dropoff_datetime) - F.unix_timestamp(df_yellow.pickup_datetime))/ F.lit(3600)) \
+    .withColumn('pickup_datetime',df_yellow.pickup_datetime) \
+    .groupBy('pickup_datetime') \
+    .agg(F.max('duration_hours').alias('max_duration_hours')) \
+    .orderBy('max_duration_hours',ascending=False) \
+    .limit(5) \
+    .show()
+```
 
 ## Question 5: User Interface
 
@@ -105,7 +116,9 @@ Spark’s User Interface which shows the application's dashboard runs on which l
 - 4040
 - 8080
 
+### Answer:  4040
 
+`http://127.0.0.1:4040/jobs/`
 
 ## Question 6: Least frequent pickup location zone
 
@@ -122,8 +135,20 @@ Using the zone lookup data and the Yellow October 2024 data, what is the name of
 - Rikers Island
 - Jamaica Bay
 
+### Answer:  Governor's Island/Ellis Island/Liberty Island
 
-## Submitting the solutions
+```
+df_zone = spark.read \
+        .option("header", "true") \
+        .csv("taxi_zone_lookup.csv")
 
-- Form for submitting: https://courses.datatalks.club/de-zoomcamp-2025/homework/hw5
-- Deadline: See the website
+df_zone.registerTempTable("taxi_zone")
+
+spark.sql("""
+        SELECT t.zone, count(1) FROM YELLOW_TRIPDATA yt join taxi_zone t on yt.PULocationID = t.LocationID
+        group by t.zone
+        order by 2 asc
+        """).show()
+
+```
+
