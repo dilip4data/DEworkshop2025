@@ -151,4 +151,8 @@ spark.sql("""
         """).show()
 
 ```
+##   Link to Jupyter Notebook with detailed steps of homework
+
+https://github.com/dilip4data/DEworkshop2025/blob/main/week5/homework_week5/Week5_HomeWork_10MAR2025.ipynb
+
 
