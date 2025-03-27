@@ -31,7 +31,14 @@ docker-compose up
 
 Visit http://localhost:8081 to see the Flink Job Manager
 
+<img src="https://github.com/user-attachments/assets/bb05950b-26bc-46b6-b3f4-189cb4198a6c" width="750" />
+
+
 Connect to Postgres with pgcli, pg-admin, [DBeaver](https://dbeaver.io/) or any other tool.
+
+### Created Pgadmin and Jupyter to be part of Main Dockercompose file to make sure all the services are within same pg-network
+
+<img src="https://github.com/user-attachments/assets/6c311dde-63b4-491b-9f2d-3c8903b1e884" width="650" />
 
 The connection credentials are:
 
@@ -148,6 +155,11 @@ producer.bootstrap_connected()
 
 Provided that you can connect to the server, what's the output
 of the last command?
+
+### Answer
+
+<img src="https://github.com/user-attachments/assets/64231399-2327-4221-9ce1-74981ebf940f" width="650" />
+
 
 ## Question 4: Sending the Trip Data
 
