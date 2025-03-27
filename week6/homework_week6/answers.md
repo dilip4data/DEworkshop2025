@@ -72,6 +72,18 @@ Find out what you need to execute based on the `help` output.
 
 What's the version, based on the output of the command you executed? (copy the entire version)
 
+```
+$ docker exec -it fbdff789a67b bash
+redpanda@fbdff789a67b:/$
+redpanda@fbdff789a67b:/$ rpk --version
+rpk version v24.2.18 (rev f9a22d4430)
+redpanda@fbdff789a67b:/$
+redpanda@fbdff789a67b:/$
+
+```
+
+### Answer   rpk version v24.2.18 (rev f9a22d4430)
+
 
 ## Question 2. Creating a topic
 
