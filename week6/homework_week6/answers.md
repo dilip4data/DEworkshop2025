@@ -96,6 +96,20 @@ Read the output of `help` and based on it, create a topic with name `green-trips
 
 What's the output of the command for creating a topic? Include the entire output in your answer.
 
+### Answer 
+
+```
+redpanda@fbdff789a67b:/$ rpk topic create green-trips
+TOPIC        STATUS
+green-trips  OK
+redpanda@fbdff789a67b:/$
+redpanda@fbdff789a67b:/$ rpk topic list
+NAME         PARTITIONS  REPLICAS
+green-trips  1           1
+redpanda@fbdff789a67b:/$
+redpanda@fbdff789a67b:/$
+
+```
 
 ## Question 3. Connecting to the Kafka server
 
