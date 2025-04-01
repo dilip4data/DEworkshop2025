@@ -205,6 +205,11 @@ took = t1 - t0
 
 How much time did it take to send the entire dataset and flush? 
 
+### Answer  took 400.36 seconds
+
+<img src="https://github.com/user-attachments/assets/1072fcb9-1c67-4ff6-979c-b4f3c7915207" width="650" />
+
+
 
 ## Question 5: Build a Sessionization Window (2 points)
 
